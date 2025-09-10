@@ -37,9 +37,13 @@ bagan.png
 Peran settings.py dalam proyek Django
 Mengatur konfigurasi proyek, seperti:
 - INSTALLED_APP
+/n/t Daftar aplikasi yang digunakan
 - DATABASES
+/n/t Koneksi ke database
 - TEMPLATES
+/n/t Konfigurasi template
 - ALLOWED_HOSTS
+/n/t Daftar host yang mempunyai akses
 
 Cara kerja migrasi database di Django
 1. Saat menambah dan mengubah model menjalankan command
