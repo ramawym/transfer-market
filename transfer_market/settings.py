@@ -39,6 +39,10 @@ ALLOWED_HOSTS = [
     "walyulahdi-maulana-transfermarket.pbp.cs.ui.ac.id",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://walyulahdi-maulana-transfermarket.pbp.cs.ui.ac.id"
+]
+
 
 # Application definition
 
