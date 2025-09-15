@@ -7,10 +7,12 @@ from django.core import serializers
 
 # Create your views here.
 def show_main(request):
+    product_list = Product.objects.all()
     context = {
         "name": "Walyul'ahdi Maulana Ramadhan",
         "npm": "2406426012",
         "class": "PBP - F",
+        "product_list": product_list,
     }
 
     return render(request, "main.html", context)
@@ -23,14 +25,14 @@ def create_product(request):
         form.save()
         return redirect("main:show_main")
 
-    context = {"form": form}
+    context = {'form': form}
     return render(request, "create_product.html", context)
 
 
 def show_product(request, id):
     product = get_object_or_404(Product, pk=id)
 
-    context = {"product": product}
+    context = {'product': product}
 
     return render(request, "product_detail.html", context)
 
