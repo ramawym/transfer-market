@@ -6,9 +6,10 @@
 </p>
 
 <h1>{{ product.name}}</h1>
+<h3>{{ product.price }}</h3>
 <p>
   <b>{{ product.get_category_display }}</b>{% if product.is_featured %} |
-  <b>Featured</b>{% endif %}| <i>{{ product.created_at|date:"d M Y H:i" }}</i>
+  <b>Featured</b>{% endif %} | <i>{{ product.created_at|date:"d M Y H:i" }}</i>
 </p>
 
 {% if product.thumbnail %}
