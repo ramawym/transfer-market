@@ -119,7 +119,7 @@ Method `is_valid()` berfungsi untuk memvalidasi data input pengguna sesuai atura
 
 ### Peran `csrf_token` pada form di Django, Apa yang terjadi jika tidak ada? dan Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
 
-`csrf_token` berperan untuk melindungi website dari serangan CSRF Cross-Site Request Forgery. Tanpa `csrf_token`, penyerang dapat membuat web palsu yang mengirimkan request ke web kita tanpa sepengetahuan user. 
+`csrf_token` berperan untuk melindungi website dari serangan CSRF Cross-Site Request Forgery. Tanpa `csrf_token`, penyerang dapat membuat web palsu yang mengirimkan request ke web kita tanpa sepengetahuan user.
 
 ### Step-by-step Implementasi Checklist (Tugas 3)
 
@@ -190,7 +190,7 @@ Method `is_valid()` berfungsi untuk memvalidasi data input pengguna sesuai atura
       context = {'product': product}
 
       return render(request, "product_detail.html", context)
-    ```
+   ```
 
 6. Membuat routing URL untuk 4 fungsi tersebut pada `main/urls.py`
 
@@ -216,3 +216,127 @@ Tutorial 2 sudah cukup jelas dan membantu memahami konsep Form dan Data Delivery
 
 4. JSON
    ![JSON By Id](assets/readme/postman_json_by_id.png)
+
+## Tugas 4
+
+### Apa itu Django AuthenticationForm?
+
+Django AuthenticationForm adalah class form bawaan Django yang terdapat dalam modul `django.contrib.auth.forms`. Form ini secara khusus dirancang untuk menangani proses autentikasi/login dengan menyediakan field username dan password.
+
+Kelebihan: Terintegrasi penuh dengan sistem autentikasi Django, Error handling yang sudah tersedia dengan message yang jelas
+
+Kekurangan: Terbatas pada username/password
+
+### Perbedaan autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan?
+
+Autentikasi adalah proses verifikasi identitas pengguna yang membuktikan "siapa Anda", sedangkan Otorisasi merupakan proses menentukan hak akses dan izin pengguna yang menentukan "apa yang boleh Anda lakukan"
+
+Django mengimplementasikan kedua konsep ini dengan terstruktur. Django menyediakan modul `django.contrib.auth` yang mencakup model User, form AuthenticationForm, dan fungsi-fungsi helper seperti `authenticate()` dan `login()` untuk autentikasi. Sementara untuk otorisasi, Django menggunakan permission system yang terintegrasi dengan model User, dimana setiap user dapat memiliki permissions tertentu. Django juga menyediakan decorator seperti `@login_required` dan `@permission_required`
+
+### Kelebihan dan kekurangan session dan cookies
+
+#### Session
+
+Kelebihan: Data sensitif disimpan di server, tidak dapat diakses langsung oleh client, kapasitasnya besar, dapat menyimpan objek yang kompleks, bukan hanya string
+
+Kekurangan: Menyimpan data di server membutuhkan memori dan storage
+
+#### Cookies
+
+Kelebihan: Data disimpan di client sehingga mengurangi beban server, data dapat bertahan bahkan setelah browser ditutup
+
+Kekurangan: Keamanan rendah, dan ukuran terbatas
+
+### Apakah penggunaan cookies aman? apakah ada risiko yang harus diwaspadai? Bagaimana Django menangani?
+
+Penggunaan cookies tidak aman secara dan membawa berbagai risiko potensial, seperti Cross-Site Scripting (XSS) dimana penyerang dapat mencuri cookies melalui injeksi script berbahaya, Cross-Site Request Forgery (CSRF) yang memanipulasi cookies untuk melakukan aksi tidak sah atas nama pengguna, session hijacking dimana penyerang mencuri session ID dari cookies, serta cookie manipulation yang memungkinkan pengguna mengubah nilai cookies secara manual.
+
+Untuk mencegah serangan CSRF, Django secara otomatis menambahkan token CSRF yang harus disertakan dalam setiap form POST request, sehingga memastikan bahwa request benar-benar berasal dari aplikasi yang sah.
+
+### Step-by-step Implementasi Checklist (Tugas 4)
+
+1. Membuat fungsi registrasi, login, dan logout di `main/views.py`
+
+   ```python
+      def register(request):
+         form = UserCreationForm()
+
+         if request.method == "POST":
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                  form.save()
+                  messages.success(request, "Your account has been successfully created!")
+                  return redirect("main:login")
+         context = {"form": form}
+         return render(request, "register.html", context)
+
+
+      def login_user(request):
+         if request.method == "POST":
+            form = AuthenticationForm(data=request.POST)
+
+            if form.is_valid():
+                  user = form.get_user()
+                  login(request, user)
+                  response = HttpResponseRedirect(reverse("main:show_main"))
+                  response.set_cookie("last_login", str(datetime.datetime.now()))
+                  return response
+
+         else:
+            form = AuthenticationForm(request)
+         context = {"form": form}
+         return render(request, "login.html", context)
+
+
+      def logout_user(request):
+         logout(request)
+         response = HttpResponseRedirect(reverse("main:login"))
+         response.delete_cookie("last_login")
+         return response
+   ```
+
+2. Membuat routing URL untuk 3 fungsi tersebut pada `main/urls.py`
+
+   ```python
+         path("register/", register, name="register"),
+         path("login/", login_user, name="login"),
+         path("logout/", logout_user, name="logout"),
+   ```
+
+3. Membuat berkas html di `main/templates` sebagai tampilan register dan login
+   `register.html` `login.html`
+
+4. Menambahkan button logout pada `main.html`
+
+   ```html
+      <a href="{% url 'main:logout' %}">
+         <button>Logout</button>
+      </a>
+   ```
+
+5. Menerapkan Cookies `last_login` pada fungsi `login_user`
+
+   ```python
+         response.set_cookie('last_login', str(datetime.datetime.now()))
+   ```
+
+6. Menampilkan `last_login` pada `main_html`
+
+   ```html
+         <h5>Sesi terakhir login: {{ last_login }}</h5>
+   ```
+
+7. Menghubungkan model `Product` dengan `User`, dengan menambahkan `User` sebagai ForeignKey di model `Product`
+
+   ```python
+      user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+   ```
+
+8. Memodifikasi fungsi `create_product` pada `views.py` agar menyimpan data user
+
+9. Membuat dua (2) akun pengguna dengan masing-masing tiga (3) dummy data
+
+   ![Dummy 1](assets/readme/dummy_1.png)
+
+   ![Dummy 2](assets/readme/dummy_2.png)
+  
