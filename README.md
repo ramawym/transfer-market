@@ -397,7 +397,7 @@ Merupakan one dimensional layout system untuk mengatur elemen dalam satu baris a
 
 Merupakan two dimensional layout system untuk mengatur elemen dalam baris dan kolom, grid layout lebih cocok untuk digunakan pada layout halaman yang kompleks seperti gallery dan dashboard.
 
-### Step-by-step Implementasi Checklist (Tugas 4)
+### Step-by-step Implementasi Checklist (Tugas 5)
 
 1. Membuat fungsi edit_product dan delete_product pada `main/views.py`
 
