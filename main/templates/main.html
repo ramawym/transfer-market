@@ -1,64 +1,71 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block meta %}
+<title>Transfer Market</title>
+{% endblock meta %} {% block content %} {% include 'navbar.html' %}
+<div class="bg-gray-50 w-full pt-16 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header Section -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        Latest Product added
+      </h1>
+      <p class="text-gray-600">
+        Liat-liat dulu lah bang produk kalcer ini
+      </p>
+    </div>
 
-<h1>Transfer Market</h1>
+    <!-- Tabs Section -->
+    <div class="bg-white rounded-lg border border-gray-200 mb-8">
+      <div class="border-b border-gray-200">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <nav class="flex -mb-px">
+            <a
+              href="?"
+              class="{% if request.GET.filter == 'all' or not request.GET.filter %}border-blue-600 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm transition-colors"
+            >
+              All Product
+            </a>
+            <a
+              href="?filter=my"
+              class="{% if request.GET.filter == 'my' %}border-blue-600 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm transition-colors"
+            >
+              My Product
+            </a>
+          </nav>
+          {% if user.is_authenticated %}
+          <div class="text-sm text-gray-500 px-6 py-4 sm:py-0">
+            Last login: {{ last_login }}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
-<h4>Name:</h4>
-<p>{{name}}</p>
-
-<h4>NPM:</h4>
-<p>{{npm}}</p>
-
-<h4>Class:</h4>
-<p>{{class}}</p>
-
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-
-<a href="{% url 'main:create_product' %}">
-  <button>+ Add Product</button>
-</a>
-
-<a href="{% url 'main:logout' %}">
-  <button>Logout</button>
-</a>
-
-<a href="?filter=all">
-    <button type="button">All products</button>
-</a>
-<a href="?filter=my">
-    <button type="button">My products</button>
-</a>
-
-<hr />
-
-{% if not product_list %}
-<p>Belum ada produk.</p>
-{% else %} {% for product in product_list %}
-<div>
-  <h2>
-    <a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a>
-  </h2>
-
-  <h3>{{ product.price }}</h3>
-
-  <p>
-    <b>{{ product.get_category_display }}</b>{% if product.is_featured %} |
-    <b>Featured</b>{% endif %} |
-    <i>{{ product.created_at|date:"d M Y H:i" }}</i>
-  </p>
-
-  {% if product.thumbnail %}
-  <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100" />
-  <br />
-  {% endif %}
-
-  <p>{{ product.description|truncatewords:25 }}...</p>
-
-  <p>
-    <a href="{% url 'main:show_product' product.id %}"
-      ><button>Read More</button></a
-    >
-  </p>
+    <!-- Product Grid -->
+    {% if not product_list %}
+    <div class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+      <div class="w-32 h-32 mx-auto mb-4">
+        <img
+          src="{% static 'image/no-product.png' %}"
+          alt="No product available"
+          class="w-full h-full object-contain"
+        />
+      </div>
+      <p class="text-gray-500 mb-6">
+        Tambahkan product untuk mulai jualan
+      </p>
+      <a
+        href="{% url 'main:create_product' %}"
+        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+      >
+        Create Product
+      </a>
+    </div>
+    {% else %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for product in product_list %} {% include 'card_product.html' with product=product %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
 </div>
-
-<hr />
-{% endfor %} {% endif %} {% endblock content %}
+{% endblock content %}

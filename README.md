@@ -309,9 +309,9 @@ Untuk mencegah serangan CSRF, Django secara otomatis menambahkan token CSRF yang
 4. Menambahkan button logout pada `main.html`
 
    ```html
-      <a href="{% url 'main:logout' %}">
-         <button>Logout</button>
-      </a>
+   <a href="{% url 'main:logout' %}">
+     <button>Logout</button>
+   </a>
    ```
 
 5. Menerapkan Cookies `last_login` pada fungsi `login_user`
@@ -323,7 +323,7 @@ Untuk mencegah serangan CSRF, Django secara otomatis menambahkan token CSRF yang
 6. Menampilkan `last_login` pada `main_html`
 
    ```html
-         <h5>Sesi terakhir login: {{ last_login }}</h5>
+   <h5>Sesi terakhir login: {{ last_login }}</h5>
    ```
 
 7. Menghubungkan model `Product` dengan `User`, dengan menambahkan `User` sebagai ForeignKey di model `Product`
@@ -339,4 +339,110 @@ Untuk mencegah serangan CSRF, Django secara otomatis menambahkan token CSRF yang
    ![Dummy 1](assets/readme/dummy_1.png)
 
    ![Dummy 2](assets/readme/dummy_2.png)
-  
+
+## Tugas 5
+
+### Urutan prioritas jika terdapat beberapa CSS selector
+
+Jika terdapat beberapa CSS selector, maka urutan prioritasnya adalah:
+
+1. Inline styles (langsung ditulis di atribut style suatu elemen)
+2. ID selectors (selector yang menggunakan ID pada tag sebagai selector)
+3. Class selectors
+4. Element selectors
+
+### Mengapa responsive design penting? Berikan contoh aplikasi yang sudah menerapkan dan belum, jelaskan!
+
+Responsive design penting untuk pengguna mengakses web dari berbagai perangkat dengan ukuran layar yang berbeda-beda, karena responsive design memastikan tampilan web responsive dengan ukuran layar sehingga user experience optimal di semua perangkat.
+
+#### Sudah menerapkan responsive design - Youtube
+
+Grid video menyesuaikan jumlah kolom berdasarkan lebar layar, dan sidebar disembunyikan pada layar kecil.
+
+#### Belum menerapkan responsive design - Siakng
+
+Tampilan pada layar besar dan layar kecil sama saja, sehingga harus zoom dan scroll horizontal saat mengakses di perangkat mobile
+
+### Perbedaan antara margin, border, dan padding, serta cara implementasi
+
+1. Padding, adalah Ruang antara konten elemen dan border (space ada di dalam border)
+2. Border, adalah garis pembatas yang mengelilingi padding dan konten
+3. Margin, adalah ruang di luar border, antara elemen dengan elemen lain (space untuk memberi jarak)
+
+```css
+.element {
+  /* padding - dalam border */
+  padding: 20px; /* semua sisi 20px */
+  padding: 10px 20px; /* atas-bawah 10px, kiri-kanan 20px */
+  padding-top: 15px; /* atas saja 15px */
+
+  /* border - pembatas */
+  border: 2px solid #000; /* tebal 2px, warna hitam solid */
+  border-radius: 8px; /* sudut melengkung */
+
+  /* margin - luar border */
+  margin: 10px; /* semua sisi 10px */
+  margin: 0 auto; /* atas-bawah 0px, kiri-kanan auto center */
+  margin-bottom: 20px; /* bawah saja 20px */
+}
+```
+
+### Konsep flex box dan grid layout serta kegunaannya
+
+#### Flex box
+
+Merupakan one dimensional layout system untuk mengatur elemen dalam satu baris atau kolom, flex box ideal untuk digunakan pada komponen kecil seperti navigasi, card, form elements.
+
+#### Grid layout
+
+Merupakan two dimensional layout system untuk mengatur elemen dalam baris dan kolom, grid layout lebih cocok untuk digunakan pada layout halaman yang kompleks seperti gallery dan dashboard.
+
+### Step-by-step Implementasi Checklist (Tugas 4)
+
+1. Membuat fungsi edit_product dan delete_product pada `main/views.py`
+
+2. Membuat routing URL untuk 2 fungsi tersebut pada `main/urls.py`
+
+   ```
+      path('product/<uuid:id>/edit', edit_product, name='edit_product'),
+      path('product/<uuid:id>/delete', delete_product, name='delete_product'),
+   ```
+
+3. Menambahkan button edit dan delete pada loop `product_list` di `main.html`
+
+   ```
+      <a href="{% url 'main:edit_product' product.pk %}">
+      <button>Edit</button>
+      </a>
+      <a href="{% url 'main:delete_product' product.pk %}">
+      <button>Delete</button>
+      </a>
+   ```
+
+4. Menambahkan Tailwind
+   Menambahkan script cdn tailwind di bagian head
+   ```
+     <script src="https://cdn.tailwindcss.com">
+     </script>
+   ```
+
+5. Menambahkan middleware WhiteNoise pada `settings.py`
+
+```
+   'whitenoise.middleware.WhiteNoiseMiddleware',
+```
+
+6. Membuat file `global.css` dan menghubungkannya ke `base.html`
+
+```
+   link rel="stylesheet" href="{% static 'css/global.css' %}"/>
+```
+
+7. Membuat Navbar dan menautkan ke `main.html`
+
+```
+   {% include 'navbar.html' %}
+```
+8. Membuat Card product dan styling Homepage
+
+9. Styling semua page yang sudah dibuat sebelumnya (Login, Register, Detail product, Create product, Edit product)
