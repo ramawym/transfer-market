@@ -1,0 +1,91 @@
+<div
+  id="edit-product-modal"
+  class="modal hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+>
+  <div
+    class="relative top-20 mx-auto p-5 border w-full max-w-lg shadow-lg rounded-md bg-white"
+  >
+    <div class="flex justify-between items-center pb-3 border-b">
+      <p class="text-2xl font-bold">Edit Product</p>
+      <div class="cursor-pointer z-50 close-modal">
+        <svg
+          class="fill-current text-black"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 18 18"
+        >
+          <path
+            d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
+          ></path>
+        </svg>
+      </div>
+    </div>
+    <div class="mt-5 form-style">
+      <form id="edit-product-form">
+        <input type="hidden" id="edit-product-id" name="product_id" />
+
+        <div class="space-y-4">
+          <div>
+            <label
+              for="edit-name"
+              class="block text-sm font-medium text-gray-700"
+              >Name</label
+            >
+            <input type="text" name="name" id="edit-name" required />
+          </div>
+          <div>
+            <label
+              for="edit-price"
+              class="block text-sm font-medium text-gray-700"
+              >Price</label
+            >
+            <input type="number" name="price" id="edit-price" required />
+          </div>
+          <div>
+            <label
+              for="edit-description"
+              class="block text-sm font-medium text-gray-700"
+              >Description</label
+            >
+            <textarea
+              name="description"
+              id="edit-description"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="edit-thumbnail"
+              class="block text-sm font-medium text-gray-700"
+              >Thumbnail URL</label
+            >
+            <input type="url" name="thumbnail" id="edit-thumbnail" />
+          </div>
+          <div>
+            <label
+              for="edit-category"
+              class="block text-sm font-medium text-gray-700"
+              >Category</label
+            >
+            <select name="category" id="edit-category">
+              <option value="PHONE">Phone</option>
+              <option value="LAPTOP">Laptop</option>
+              <option value="TABLET">Tablet</option>
+              <option value="ACCESSORIES">Accessories</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-6">
+          <button
+            type="submit"
+            class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

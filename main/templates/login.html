@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block meta %}
+{% extends 'base.html' %} {% load static %} {% block meta %}
 <title>Login - Transfer Market</title>
 {% endblock meta %} {% block content %}
 <div
@@ -13,34 +13,10 @@
         <p class="text-gray-600">Sign in to Transfer Market</p>
       </div>
 
-      <!-- Form Errors Display -->
-      {% if form.non_field_errors %}
-      <div class="mb-6">
-        {% for error in form.non_field_errors %}
-        <div
-          class="px-4 py-3 rounded-lg text-sm border bg-red-50 border-red-200 text-red-700 flex items-start"
-        >
-          ❌
-          {{ error }}
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %} {% if form.errors %}
-      <div class="mb-6">
-        {% for field, errors in form.errors.items %} {% if field != '__all__' %}
-        {% for error in errors %}
-        <div
-          class="px-4 py-3 rounded-lg text-sm border bg-red-50 border-red-200 text-red-700 mb-2 flex items-start"
-        >
-          <span><strong>{{ field|title }}:</strong> {{ error }}</span>
-        </div>
-        {% endfor %} {% endif %} {% endfor %}
-      </div>
-      {% endif %}
+      <div id="error-container" class="mb-6"></div>
 
-      <form method="POST" action="" class="space-y-6">
+      <form id="login_form" class="space-y-6">
         {% csrf_token %}
-
         <div>
           <label
             for="username"
@@ -48,11 +24,6 @@
             >Username</label
           >
           <div class="relative">
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-            >
-              👤
-            </div>
             <input
               id="username"
               name="username"
@@ -71,11 +42,6 @@
             >Password</label
           >
           <div class="relative">
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-            >
-              🔒
-            </div>
             <input
               id="password"
               name="password"
@@ -95,20 +61,6 @@
         </button>
       </form>
 
-      <!-- Messages Display -->
-      {% if messages %}
-      <div class="mt-6">
-        {% for message in messages %}
-        <div
-          class="px-4 py-3 rounded-lg text-sm border flex items-start {% if message.tags == 'success' %} bg-green-50 border-green-200 text-green-700 {% elif message.tags == 'error' %} bg-red-50 border-red-200 text-red-700 {% else %} bg-gray-50 border-gray-200 text-gray-700 {% endif %}"
-        >
-          ✅
-          {{ message }}
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
-
       <div class="mt-6 text-center pt-6 border-t border-gray-200">
         <p class="text-gray-600 text-sm">
           Don't have an account?
@@ -123,4 +75,49 @@
     </div>
   </div>
 </div>
+
+<script>
+  // Pastikan fungsi showToast sudah tersedia (dari base.html)
+  document
+    .getElementById("login_form")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const errorContainer = document.getElementById("error-container");
+      errorContainer.innerHTML = ""; // Bersihkan error sebelumnya
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch("{% url 'main:login_ajax' %}", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+              .value,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+          showToast(result.message, "success");
+          setTimeout(() => {
+            window.location.href = "{% url 'main:show_main' %}";
+          }, 1500);
+        } else {
+          // Tampilkan error di container yang disediakan
+          const errorDiv = document.createElement("div");
+          errorDiv.className =
+            "px-4 py-3 rounded-lg text-sm border bg-red-50 border-red-200 text-red-700 flex items-start";
+          errorDiv.innerHTML = `❌ ${result.message}`;
+          errorContainer.appendChild(errorDiv);
+        }
+      } catch (error) {
+        showToast("Could not connect to the server.", "error");
+      }
+    });
+</script>
 {% endblock content %}

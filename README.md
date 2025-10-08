@@ -446,3 +446,43 @@ Merupakan two dimensional layout system untuk mengatur elemen dalam baris dan ko
 8. Membuat Card product dan styling Homepage
 
 9. Styling semua page yang sudah dibuat sebelumnya (Login, Register, Detail product, Create product, Edit product)
+
+## Tugas 6
+
+### Perbedaan antara synchronous dan asynchronous request
+
+* Synchronous request: Browser akan menunggu respons dari server sebelum melanjutkan proses lain. Hal ini membuat halaman tampak “berhenti sejenak” hingga server mengembalikan data.
+
+* Asynchronous request (AJAX): Browser tidak perlu menunggu respons untuk melanjutkan eksekusi kode lain. Proses pengambilan atau pengiriman data ke server dilakukan di latar belakang, sehingga halaman tetap interaktif tanpa perlu reload.
+
+### Alur request-response AJAX
+
+1. Pengguna melakukan aksi di halaman (misalnya klik tombol “Tambah Produk”).
+
+2. JavaScript (melalui fetch() atau XMLHttpRequest) mengirimkan request AJAX ke URL endpoint Django (biasanya ke views.py dengan @csrf_exempt atau @require_POST).
+
+3. Django menerima request tersebut, memproses data (misalnya menyimpan produk baru ke database), lalu mengembalikan response JSON.
+
+4. JavaScript di sisi klien menerima data JSON itu, kemudian memperbarui tampilan halaman secara dinamis tanpa perlu reload.
+
+### Keuntungan menggunakan AJAX
+
+* Tanpa reload halaman: Pengguna tidak perlu menunggu seluruh halaman dimuat ulang setiap kali melakukan aksi.
+* Respons lebih cepat dan ringan: Hanya data yang diperlukan yang dikirim, bukan seluruh halaman HTML.
+* UX lebih baik: Transisi terasa halus, interaktif, dan modern.
+* Efisiensi server: Mengurangi beban render template berulang.
+
+### Cara memastikan keamanan AJAX untuk Login dan Register
+
+* Gunakan CSRF Token: Sertakan token CSRF di setiap request POST AJAX agar Django mengenali permintaan sebagai sah.
+* Validasi input di server: Jangan bergantung pada validasi di sisi klien saja.
+* Gunakan HTTPS: Agar data sensitif (seperti password) terenkripsi selama proses pengiriman.
+* Batasi respons JSON: Jangan mengembalikan data sensitif seperti password atau session token ke klien.
+* Gunakan mekanisme @login_required dan @csrf_protect: Untuk melindungi endpoint yang hanya boleh diakses oleh pengguna terautentikasi.
+
+### Bagaimana AJAX mempengaruhi User Experience
+
+* Interaksi lebih cepat dan responsif karena tidak perlu memuat ulang halaman.
+* Transisi antar aksi terasa halus (misalnya menambah produk langsung muncul di daftar).
+* Feedback langsung melalui toast, loading indicator, atau error message yang membuat pengguna tahu apa yang sedang terjadi.
+* Mengurangi frustrasi pengguna karena proses lebih efisien dan interaktif.

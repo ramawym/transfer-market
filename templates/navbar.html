@@ -7,7 +7,6 @@
         </h1>
       </div>
 
-      <!-- Desktop Navigation -->
       <div class="hidden md:flex items-center space-x-8">
         <a
           href="/"
@@ -15,31 +14,25 @@
         >
           Home
         </a>
-        <a
-          href="{% url 'main:create_product' %}"
-          class="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+        <button
+          class="create-product-trigger text-gray-600 hover:text-blue-600 font-medium transition-colors"
         >
           Create Product
-        </a>
+        </button>
       </div>
 
-      <!-- Desktop User Section -->
       <div class="hidden md:flex items-center space-x-6">
         {% if user.is_authenticated %}
         <div class="text-right">
           <div class="text-sm font-medium text-gray-900">
-            {{ name|default:user.username }}
-          </div>
-          <div class="text-xs text-gray-500">
-            {{ npm|default:"Student" }} - {{ class|default:"Class" }}
+            {{ user.username }}
           </div>
         </div>
-        <a
-          href="{% url 'main:logout' %}"
-          class="text-red-600 hover:text-red-700 font-medium transition-colors"
+        <button
+          class="logout-btn text-red-600 hover:text-red-700 font-medium transition-colors"
         >
           Logout
-        </a>
+        </button>
         {% else %}
         <a
           href="{% url 'main:login' %}"
@@ -56,7 +49,6 @@
         {% endif %}
       </div>
 
-      <!-- Mobile Menu Button -->
       <div class="md:hidden flex items-center">
         <button
           class="mobile-menu-button p-2 text-gray-600 hover:text-blue-600 transition-colors"
@@ -77,10 +69,8 @@
       </div>
     </div>
   </div>
-  <!-- Mobile Menu -->
   <div class="mobile-menu hidden md:hidden bg-white border-t border-gray-200 rounded-b-2xl">
     <div class="px-6 py-4 space-y-4">
-      <!-- Mobile Navigation Links -->
       <div class="space-y-1">
         <a
           href="/"
@@ -88,31 +78,25 @@
         >
           Home
         </a>
-        <a
-          href="{% url 'main:create_product' %}"
-          class="block text-gray-600 hover:text-blue-600 font-medium py-3 transition-colors"
+        <button
+          class="create-product-trigger block text-gray-600 hover:text-blue-600 font-medium py-3 transition-colors text-left w-full"
         >
           Create Product
-        </a>
+        </button>
       </div>
 
-      <!-- Mobile User Section -->
       <div class="border-t border-gray-200 pt-4">
         {% if user.is_authenticated %}
         <div class="mb-4">
           <div class="font-medium text-gray-900">
-            {{ name|default:user.username }}
-          </div>
-          <div class="text-sm text-gray-500">
-            {{ npm|default:"Student" }} - {{ class|default:"Class" }}
+            {{ user.username }}
           </div>
         </div>
-        <a
-          href="{% url 'main:logout' %}"
-          class="block text-red-600 hover:text-red-700 font-medium py-3 transition-colors"
+        <button
+          class="logout-btn block text-red-600 hover:text-red-700 font-medium py-3 transition-colors text-left w-full"
         >
           Logout
-        </a>
+        </button>
         {% else %}
         <div class="space-y-3">
           <a
