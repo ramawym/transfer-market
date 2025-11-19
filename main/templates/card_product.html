@@ -45,8 +45,7 @@
   <div class="p-5">
     <!-- Star Rating -->
     <div class="flex items-center mb-3 star-rating">
-      {% with rating=product.rating|floatformat:0|add:0 %} {% for i in "12345"
-      %} {% if forloop.counter <= rating %}
+      {% with rating=product.rating|floatformat:0|add:0 %} {% for i in "12345"%} {% if forloop.counter <= rating %}
       <span class="star">★</span>
       {% else %}
       <span class="star empty">★</span>
